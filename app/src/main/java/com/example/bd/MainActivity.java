@@ -1,5 +1,6 @@
 package com.example.bd;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -15,10 +16,15 @@ import com.example.bd.dao.AlunoDAO;
 import com.example.bd.model.Aluno;
 import com.google.firebase.inappmessaging.model.Button;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText edtId, edtNome, edtTelefone, edtCpf, edtListar;
     private Button btnLimpar, btnSalvar;
+    private AlunoDAO dao;
+    private List<Aluno> alunos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void limpar(View view){
-        edtId.setText(null);
+
         edtNome.setText(null);
         edtTelefone.setText(null);
         edtCpf.setText(null);
@@ -59,5 +65,21 @@ public class MainActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
 
     }
+
+    public void listar(View view){
+        dao = new AlunoDAO(this);
+        alunos = dao.obterTodos();
+        for (Aluno aluno : alunos) {
+            edtListar.append("ID : " + aluno.getId() + "\n");
+            edtListar.append("Nome : " + aluno.getNome() + "\n");
+            edtListar.append("CPF : " + aluno.getCpf() + "\n");
+            edtListar.append("Telefone: " + aluno.getTelefone() + "\n");
+        }
+    }
+    public void proxima(View view){
+        Intent it = new Intent(this, Manutencao.class);
+        startActivity(it);
+    }
+
 
 }
